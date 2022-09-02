@@ -508,6 +508,7 @@ GameObject:
   - component: {fileID: 2126581771}
   - component: {fileID: 2126581770}
   - component: {fileID: 2126581772}
+  - component: {fileID: 2126581773}
   m_Layer: 0
   m_Name: billy
   m_TagString: Player
@@ -565,7 +566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db7005551db25614e9c8510b24b0b53f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement_speed: 5
+  movement_speed: 1
   sprite_top: {fileID: 2129540212}
   sprite_bot: {fileID: 1180234558}
 --- !u!61 &2126581772
@@ -594,6 +595,26 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.20696199, y: 0.52504367}
   m_EdgeRadius: 0
+--- !u!95 &2126581773
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2126581768}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f212d2e90de3eb345ad6b8725fc9aeb5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2129540212
 GameObject:
   m_ObjectHideFlags: 0

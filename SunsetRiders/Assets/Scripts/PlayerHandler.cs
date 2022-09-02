@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class PlayerHandler : MonoBehaviour
 {
+
     Vector2 vel;
     bool is_touching_ground = false;
+
+    Dictionary<string, int> ANIM_STATES = new Dictionary<string, int>
+    {
+        { "idle", 0 },
+        { "walk", 1 }
+    };
 
     public float movement_speed;
     public GameObject sprite_top;
@@ -21,15 +28,18 @@ public class PlayerHandler : MonoBehaviour
         {
             vel.x = -movement_speed;
             flipSprites(vel);
+            GetComponent<Animator>().SetInteger("state", ANIM_STATES["walk"]);
         } else if (Input.GetKeyDown(KeyCode.D))
         {
             vel.x = movement_speed;
             flipSprites(vel);
+            GetComponent<Animator>().SetInteger("state", ANIM_STATES["walk"]);
         }
 
         if ((Input.GetKeyUp(KeyCode.A) && vel.x < 0) || (Input.GetKeyUp(KeyCode.D) && vel.x > 0))
         {
             vel.x = 0;
+            GetComponent<Animator>().SetInteger("state", ANIM_STATES["idle"]);
         }
     }
 
@@ -54,8 +64,6 @@ public class PlayerHandler : MonoBehaviour
 
     private void flipSprites(Vector2 vel)
     {
-        bool flipValue = vel.x < 0;
-        sprite_top.GetComponent<SpriteRenderer>().flipX = flipValue;
-        sprite_bot.GetComponent<SpriteRenderer>().flipX = flipValue;
+        gameObject.transform.localScale = new Vector3(Mathf.Sign(vel.x), 1, 1);
     }
 }
