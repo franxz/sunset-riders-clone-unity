@@ -724,6 +724,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movement_speed: 1
+  jump_speed: 3.5
   sprite_top: {fileID: 2129540212}
   sprite_bot: {fileID: 1180234558}
 --- !u!61 &2126581772
