@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class reaper_bullet : MonoBehaviour
 {
     public float movement_speed;
 
     Vector2 vel;
+    Vector2 dir;
 
     void Start()
     {
-        vel = transform.rotation * new Vector2(movement_speed, 0);
+        vel = dir * movement_speed;
         Destroy(gameObject, 3f);
     }
 
@@ -25,10 +26,15 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Enemy")
+        if (col.gameObject.tag == "Player")
         {
-            col.gameObject.GetComponent<reaper>().getHit();
+            Destroy(col.gameObject);
             Destroy(gameObject);
         }
+    }
+
+    public void setDirection(Vector2 direction)
+    {
+        dir = direction;
     }
 }

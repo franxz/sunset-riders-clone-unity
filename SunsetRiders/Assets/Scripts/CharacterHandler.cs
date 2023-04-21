@@ -214,7 +214,6 @@ public class CharacterHandler : MonoBehaviour
             is_cooldown = true;
             Invoke("resetCooldown", cooldown);
             int angle = FIRE_ROTATION_DEGREES[direction];
-            Debug.Log(angle);
             GameObject bulletSpawn = bulletSpawns[direction];
             GameObject newBullet = Instantiate(bullet, bulletSpawn.transform.position, Quaternion.Euler(0, 0, isFacingRight ? angle : 180 - angle));
             setTopAnimationState(TOP_ANIM_STATES["fire"]);
