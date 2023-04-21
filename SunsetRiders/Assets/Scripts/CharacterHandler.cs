@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class CharacterHandler : MonoBehaviour
 {
@@ -48,6 +49,24 @@ public class CharacterHandler : MonoBehaviour
 
     Vector2 vel;
     Dictionary<string, bool> myInput = new Dictionary<string, bool>
+    {
+        { "UP", false },
+        { "RIGHT", false },
+        { "DOWN", false },
+        { "LEFT", false },
+        { "JUMP", false},
+        { "FIRE", false },
+    };
+    Dictionary<string, bool> keyboardInput = new Dictionary<string, bool>
+    {
+        { "UP", false },
+        { "RIGHT", false },
+        { "DOWN", false },
+        { "LEFT", false },
+        { "JUMP", false},
+        { "FIRE", false },
+    };
+    Dictionary<string, bool> mobileInput = new Dictionary<string, bool>
     {
         { "UP", false },
         { "RIGHT", false },
@@ -104,12 +123,54 @@ public class CharacterHandler : MonoBehaviour
         {
             if (Input.GetKeyDown(entry.Value))
             {
-                myInput[entry.Key] = true;
+                keyboardInput[entry.Key] = true;
             }
             else if (Input.GetKeyUp(entry.Value))
             {
-                myInput[entry.Key] = false;
+                keyboardInput[entry.Key] = false;
             }
+        }
+
+        // TODO: improve this!
+        if (CrossPlatformInputManager.GetAxis("Horizontal") > 0.3)
+            mobileInput["RIGHT"] = true;
+        else
+            mobileInput["RIGHT"] = false;
+        if (CrossPlatformInputManager.GetAxis("Horizontal") < -0.3)
+            mobileInput["LEFT"] = true;
+        else
+            mobileInput["LEFT"] = false;
+
+        if (CrossPlatformInputManager.GetAxis("Vertical") > 0.3)
+            mobileInput["UP"] = true;
+        else
+            mobileInput["UP"] = false;
+        if (CrossPlatformInputManager.GetAxis("Vertical") < -0.3)
+            mobileInput["DOWN"] = true;
+        else
+            mobileInput["DOWN"] = false;
+        
+        if (CrossPlatformInputManager.GetButtonDown("Jump"))
+        {
+            mobileInput["JUMP"] = true;
+        }
+        else if (CrossPlatformInputManager.GetButtonUp("Jump"))
+        {
+            mobileInput["JUMP"] = false;
+        }
+
+        if (CrossPlatformInputManager.GetButtonDown("Fire"))
+        {
+            mobileInput["FIRE"] = true;
+        }
+        else if (CrossPlatformInputManager.GetButtonUp("Fire"))
+        {
+            mobileInput["FIRE"] = false;
+        }
+
+        foreach (KeyValuePair<string, KeyCode> entry in KEYS)
+        {
+            myInput[entry.Key] = keyboardInput[entry.Key] || mobileInput[entry.Key];
         }
     }
 
@@ -280,5 +341,10 @@ public class CharacterHandler : MonoBehaviour
             direction = dir;
             sprite_top.GetComponent<Animator>().SetInteger("direction", dir);
         }
+    }
+
+    public int getHorizontalDirection()
+    {
+        return isFacingRight ? 1 : -1;
     }
 }

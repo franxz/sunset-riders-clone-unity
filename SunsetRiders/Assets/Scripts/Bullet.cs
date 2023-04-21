@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
     public float movement_speed;
 
     Vector2 vel;
+    bool isBoom = false;
 
     void Start()
     {
@@ -25,8 +26,14 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
+        if (isBoom)
+        {
+            return;
+        }
+
         if (col.gameObject.tag == "Enemy")
         {
+            isBoom = true;
             col.gameObject.GetComponent<reaper>().getHit();
             Destroy(gameObject);
         }

@@ -13,6 +13,7 @@ public class reaper : MonoBehaviour
     Animator animator;
     Vector3 stageMax;
     Vector3 stageMin;
+    Vector3 preferedHeight;
     Vector2 vel = new Vector2(0, 0);
     bool isGettingClose = true;
     bool isCooldown = false;
@@ -24,6 +25,7 @@ public class reaper : MonoBehaviour
         StageHandler stage = GameObject.FindGameObjectWithTag("Stage").GetComponent<StageHandler>();
         stageMax = stage.max.transform.position;
         stageMin = stage.min.transform.position;
+        preferedHeight = stage.reaperPreferedHeight.transform.position;
 
         player = GameObject.Find("gunner");
         sprite = gameObject.transform.Find("reaper_sprite").gameObject;
@@ -41,15 +43,18 @@ public class reaper : MonoBehaviour
         float optimalDistance = isGettingClose ? 3.8f : 4.8f;
 
         Vector2 distance = player.gameObject.transform.position - gameObject.transform.position;
+        vel = distance.normalized * movementSpeed;
+
         if (distance.sqrMagnitude > optimalDistance)
         {
+            // we need to get close
             isGettingClose = true;
-            vel = distance.normalized * movementSpeed;
         }
         else
         {
+            // we're close enough -> let's fire
             isGettingClose = false;
-            vel = distance.normalized * -movementSpeed / 4f;
+            vel = -1 * vel / 4f;
             if (!isCooldown)
             {
                 isCooldown = true;
@@ -61,6 +66,9 @@ public class reaper : MonoBehaviour
                 newBullet.GetComponent<reaper_bullet>().setDirection(distance.normalized);
             }
         }
+
+        // we want the reaper flying at the preferedHeight, so we move it there
+        vel.y += Mathf.Sign(preferedHeight.y - transform.position.y) * Mathf.Sqrt(Mathf.Abs(preferedHeight.y - transform.position.y));
 
         if (!isFireAnimationActive)
         {
@@ -88,15 +96,24 @@ public class reaper : MonoBehaviour
 
     void checkLimits()
     {
-        float yPadTop = 0.15f;
-        float yPadBot = 0.15f / 2f;
-        if (GetComponent<Rigidbody2D>().position.y + yPadTop > stageMax.y)
+        //float yPadTop = 0.075f;
+        float yPadBot = 0.075f;
+
+        /*if (GetComponent<Rigidbody2D>().position.y > stageMax.y - yPadTop)
         {
             GetComponent<Rigidbody2D>().position = new Vector2(GetComponent<Rigidbody2D>().position.x, stageMax.y - yPadTop);
         }
-        else if (GetComponent<Rigidbody2D>().position.y - yPadBot < stageMin.y)
+        else*/
+        if (GetComponent<Rigidbody2D>().position.y < stageMin.y + yPadBot)
         {
-            GetComponent<Rigidbody2D>().position = new Vector2(GetComponent<Rigidbody2D>().position.x, stageMin.y + yPadBot);
+            if (isDead)
+            {
+                vel.y *= -0.35f;
+                GetComponent<Rigidbody2D>().position = new Vector2(GetComponent<Rigidbody2D>().position.x, stageMin.y + yPadBot);
+            } else
+            {
+                GetComponent<Rigidbody2D>().position = new Vector2(GetComponent<Rigidbody2D>().position.x, stageMin.y + yPadBot);
+            }
         }
     }
 
