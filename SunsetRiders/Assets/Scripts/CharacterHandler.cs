@@ -131,6 +131,7 @@ public class CharacterHandler : MonoBehaviour
             }
         }
 
+#if UNITY_ANDROID
         // TODO: improve this!
         if (CrossPlatformInputManager.GetAxis("Horizontal") > 0.3)
             mobileInput["RIGHT"] = true;
@@ -167,6 +168,7 @@ public class CharacterHandler : MonoBehaviour
         {
             mobileInput["FIRE"] = false;
         }
+#endif
 
         foreach (KeyValuePair<string, KeyCode> entry in KEYS)
         {
